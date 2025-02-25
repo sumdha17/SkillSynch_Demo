@@ -1,0 +1,4 @@
+**/venv
+**/env
+**/local.py
+**/__pycache__
