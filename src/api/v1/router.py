@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from api.v1.views import question_view, user_view, course_view, module_view, lesson_view, que_option_view, answer_view
+from api.v1.views import question_view, user_view, course_view, module_view, lesson_view, que_option_view, answer_view, assignee_view
 from django.urls import include, path
 from api.v1.views.course_category_view import CategoryViewSet
 
@@ -16,8 +16,7 @@ router.register(r'lessons', lesson_view.LessonViewSet)
 router.register(r'questions', question_view.QuestionViewSet)
 router.register(r'question-options',que_option_view.QuestionOptionsViewSet)
 router.register(r'answer',answer_view.AnswerViewSet)
-
-
+router.register(r'assignee', assignee_view.AssigneeViewSet)
 
 
 

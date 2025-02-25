@@ -56,6 +56,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError("No account exists for this email.")
         return value
     
+    
 class ResetPasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)

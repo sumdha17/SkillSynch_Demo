@@ -61,14 +61,11 @@ class ForgotPasswordAPIView(APIView):
             user = CustomUser.objects.get(email=email)
             token = str(uuid.uuid4())
             send_mail_to_reset_password(user.email, token)
-            
             return Response({"message": "Password reset link is sent to your email."},status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
 class ResetPasswordAPIView(APIView):
-    authentication_classes = [TokenAuthentication] 
-    permission_classes = [IsAuthenticated] 
     def post(self, request):
         serializer = ResetPasswordSerializer(data=request.data)
         if serializer.is_valid():
@@ -79,8 +76,8 @@ class ResetPasswordAPIView(APIView):
 
         
 class LogoutAPIView(APIView):
-    authentication_classes = [TokenAuthentication]  # Ensure token authentication
-    permission_classes = [IsAuthenticated]  # Only logged-in users can log out
+    authentication_classes = [TokenAuthentication]          # Ensure token authentication
+    permission_classes = [IsAuthenticated]             # Only logged-in users can log out
 
     def post(self, request):
         # Get the user's token
@@ -98,6 +95,15 @@ class GetAllUserViewSet(ModelViewSet):
     serializer_class = GetAllUserSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]              # Only admin can access
+    
+    def create(self, request, *args, **kwargs):
+        super().create(request, *args, **kwargs)
+        return Response({'success': f'User created successfully.'}, status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, *args, **kwargs):
+        super().destroy(request, *args, **kwargs)
+        return Response({'success': f'User deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
+    
     
     
 

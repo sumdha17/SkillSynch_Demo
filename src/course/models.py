@@ -28,12 +28,11 @@ class Course(CommonFields):
         db_table = 'courses'
         
         
-
 class Assignee(CommonFields):
     course = models.ForeignKey(Course, on_delete=models.SET_NULL, related_name='assignee_course', blank=True,null=True)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='assignee_user')
     type = models.ForeignKey(Choice, on_delete=models.SET_NULL, related_name='assignee_type', limit_choices_to={'choice_type': 'assignee'}, null=True)
-    designation = models.CharField(max_length=255, blank=True, null=True)
+    designation = models.ForeignKey(Choice, on_delete=models.SET_NULL, related_name='assignee_designation',limit_choices_to={'choice_type': 'designation'}, blank=True, null=True)
     department = models.CharField(max_length=200, blank=True, null=True)
     grade = models.CharField(max_length=2)
 
