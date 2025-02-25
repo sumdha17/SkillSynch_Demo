@@ -61,8 +61,8 @@ class Lesson(CommonFields):
     lesson_number = models.IntegerField()
     lesson_name = models.CharField(max_length=255)
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='module_lesson')
-    lesson_duration = models.DurationField()
-    lesson_description = models.TextField()
+    lesson_duration = models.DurationField(null=True, blank=True)
+    lesson_description = models.TextField(null=True, blank=True)
     media = models.FileField(upload_to='media/lesson_files', null=True, blank=True)
     
     def __str__(self):
@@ -97,7 +97,7 @@ class QuestionOptions(CommonFields):
 
     class Meta:
         db_table = 'question_options'
-        
+        unique_together = ('question', 'options')
         
 class Answer(CommonFields):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answer')

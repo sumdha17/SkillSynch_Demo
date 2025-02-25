@@ -12,7 +12,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ["first_name", "last_name",  "type", "email", "status","phone_number", "password"]
-        extra_kwargs = {'password': {'write_only': True}}             #
+        extra_kwargs = {'password': {'write_only': True}}             
         
     def create(self, validated_data):
         """Create user with hashed password"""
