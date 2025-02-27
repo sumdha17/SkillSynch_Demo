@@ -56,10 +56,11 @@ class Lesson(CommonFields):
         
         
         
-class Question(CommonFields): #(lesson -fk) (flag - use for lesson and use for module lesson)
+class Question(CommonFields): 
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name= 'module_question')
     question = models.CharField(max_length=255)
     type = models.ForeignKey(Choice, on_delete=models.SET_NULL, null=True, blank=True, limit_choices_to={'choice_type': 'answer'}, related_name='question_type')
+    is_lesson = models.BooleanField(null=True, blank=True)
     
     def __str__(self):
         return self.question
@@ -73,7 +74,7 @@ class QuestionOptions(CommonFields):
         on_delete=models.CASCADE,
         related_name='question_options_question',
     )
-    options = models.CharField(max_length=255,)  #is_correct 
+    options = models.CharField(max_length=255,) 
     is_correct = models.BooleanField(null=True, blank=True, default=False)
     
 

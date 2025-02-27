@@ -25,7 +25,7 @@ urlpatterns = [
     path("login/", user_view.LoginAPIView.as_view(), name="login"),
     path("logout/", user_view.LogoutAPIView.as_view(), name="logout"),
     path("forgot-password/",user_view.ForgotPasswordAPIView.as_view(), name="forgot-password"),
-    path("reset-password/",user_view.ResetPasswordAPIView.as_view(), name="reset-password"),
+    path("reset-password/<str:token>/",user_view.ResetPasswordAPIView.as_view(), name="reset-password"),
     path("", include(router.urls)),
     
     

@@ -8,7 +8,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from api.v1.scripts.email_fun import send_mail_to_reset_password
-import uuid
+from django.contrib.auth.hashers import make_password
+from django.core.cache import cache
 
 
 class SignUpAPIView(APIView):
@@ -61,16 +62,30 @@ class ForgotPasswordAPIView(APIView):
             user = CustomUser.objects.get(email=email)
             subject = "Reset Your Password"
             message = f"Hi..Click On given Link to Reset Password."
-            send_mail_to_reset_password(user.email, message, subject)
+            send_mail_to_reset_password(user.email, message, subject, user)
             return Response({"message": "Password reset link is sent to your email."},status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
 class ResetPasswordAPIView(APIView):
-    def post(self, request):
+    def post(self, request, token):
+        user_id = cache.get(token)   # Retrieve user ID using the token
+        if not user_id:
+            return Response({"error": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = CustomUser.objects.get(pk=user_id)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_400_BAD_REQUEST)
+        
         serializer = ResetPasswordSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            new_password = serializer.validated_data['new_password']
+            user.password = make_password(new_password)            # Hash and save password
+            user.save()
+            # Remove token after successful reset
+            cache.delete(token)
+            
             return Response({"message": "Password reset successfully."}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
