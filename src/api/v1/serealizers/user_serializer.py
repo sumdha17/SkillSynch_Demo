@@ -2,6 +2,7 @@ from rest_framework import serializers
 from user.models import CustomUser
 from django.core.validators import RegexValidator, EmailValidator
 from django.contrib.auth import authenticate
+from course.models import Assignee
 
 class CustomUserSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(required=False,
@@ -74,3 +75,28 @@ class GetAllUserSerializer(serializers.ModelSerializer):
         fields = ["first_name", "last_name", "email", "username", "status","phone_number","type"]
             
     
+
+
+class UserAssigneeSerializer(serializers.ModelSerializer):
+    designation = serializers.CharField(write_only=True, required=False)
+    name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Assignee
+        fields = '__all__'
+
+    def get_name(self, obj):
+        return f"{obj.user.first_name} {obj.user.last_name}" if obj.user else ""
+
+    def validate(self, data):
+        if 'designation' in data:
+            user = CustomUser.objects.filter(designation__choice_name=data['designation']).first()
+            if not user:
+                raise serializers.ValidationError({'designation': 'User with this designation does not exist.'})
+            data['user'] = user
+            data.pop('designation')
+        else:
+            raise serializers.ValidationError({'error': 'Designation must be provided.'})
+        return data
+
+        

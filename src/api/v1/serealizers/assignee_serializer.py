@@ -7,4 +7,4 @@ class AssigneeSerializer(serializers.ModelSerializer):
         model = Assignee
         fields = ["id", "course", "user", "type", "designation", "department", "grade"]
         
-    
+

@@ -1,4 +1,4 @@
-from api.v1.serealizers.user_serializer import CustomUserSerializer, LoginSerializer, ForgotPasswordSerializer, GetAllUserSerializer,ResetPasswordSerializer
+from api.v1.serealizers.user_serializer import CustomUserSerializer, LoginSerializer, ForgotPasswordSerializer, GetAllUserSerializer,ResetPasswordSerializer, UserAssigneeSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from user.models import CustomUser
@@ -59,8 +59,9 @@ class ForgotPasswordAPIView(APIView):
         if serializer.is_valid():
             email = serializer.validated_data["email"]
             user = CustomUser.objects.get(email=email)
-            token = str(uuid.uuid4())
-            send_mail_to_reset_password(user.email, token)
+            subject = "Reset Your Password"
+            message = f"Hi..Click On given Link to Reset Password."
+            send_mail_to_reset_password(user.email, message, subject)
             return Response({"message": "Password reset link is sent to your email."},status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -104,6 +105,13 @@ class GetAllUserViewSet(ModelViewSet):
         super().destroy(request, *args, **kwargs)
         return Response({'success': f'User deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
     
+    
+    
+class AddAssigneeUserViewSet(ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserAssigneeSerializer
+    authentication_classes = []
+    permission_classes = []  
     
     
 

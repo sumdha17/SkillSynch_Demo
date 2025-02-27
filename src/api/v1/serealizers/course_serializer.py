@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from course.models import Course
+from course.models import Course, Assignee
 
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,5 +12,6 @@ class CourseSerializer(serializers.ModelSerializer):
             data['category'] = str(instance.category.category_name) if instance.category else None  
         # Convert status (ChoiceField) to its display value
             data['status'] = str(instance.status.choice_name) if instance.status else None  # For ChoiceField
-            return data
+            return 
+        
         

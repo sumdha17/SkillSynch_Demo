@@ -17,7 +17,8 @@ class CustomUser(AbstractUser, CommonFields):
     type = models.ForeignKey(Choice, on_delete=models.SET_NULL, related_name='users_type', limit_choices_to={'choice_type': 'user'},null=True, blank=True)
     status = models.ForeignKey(Choice, on_delete=models.SET_NULL, related_name='user_status', limit_choices_to={'choice_type': 'status'}, null=True, blank=True)
     image = models.ImageField(upload_to='user_images', null=True, blank=True)
-    
+    designation = models.ForeignKey(Choice, on_delete=models.SET_NULL, related_name='assignee_designation',limit_choices_to={'choice_type': 'designation'}, blank=True, null=True )  
+
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']

@@ -6,8 +6,12 @@ from rest_framework.permissions import IsAuthenticated
 
 
 
+
 class AssigneeViewSet(ModelViewSet):
     queryset = Assignee.objects.all()
     serializer_class = AssigneeSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    
+    
+    
