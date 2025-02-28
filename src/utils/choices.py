@@ -6,6 +6,7 @@ CHOICE_TYPE = [
     ("assignee", "Assignee"),
     ("answer", "Answer"),
     ("designation", "Designation"),
+    ("test_result", "Test_Result")
     
 ]
 

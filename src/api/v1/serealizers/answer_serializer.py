@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from course.models import QuestionOptions
+from course.models import Answers
 
-class QuestionOptionSerializer(serializers.ModelSerializer):
+class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = QuestionOptions
+        model = Answers
         fields = ["id", "question", "options"]
         
     def to_representation(self, instance):

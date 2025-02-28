@@ -24,7 +24,6 @@ class SignUpAPIView(APIView):
             "email": "admin@gmail.com",
             "password": "addmin123",
         }
-
     Responses:
         - 201 Created: Returns the newly created user data.
         - 400 Bad Request: Returns validation errors if the input is invalid.
@@ -73,6 +72,7 @@ class UserGetUpdateViewSet(ModelViewSet):
     serializer_class = CustomUserSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
+    pagination_class = UserPagination
     
     
     

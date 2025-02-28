@@ -1,13 +1,13 @@
-from api.v1.serealizers.que_option_serializer import QuestionOptionSerializer
+from api.v1.serealizers.answer_serializer import AnswerSerializer
 from rest_framework.viewsets import ModelViewSet
-from course.models import QuestionOptions
+from course.models import Answers
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 
 
-class QuestionOptionsViewSet(ModelViewSet):
-    queryset = QuestionOptions.objects.all()
-    serializer_class = QuestionOptionSerializer
+class AnswerViewSet(ModelViewSet):
+    queryset = Answers.objects.all()
+    serializer_class = AnswerSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
