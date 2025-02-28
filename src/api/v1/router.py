@@ -15,8 +15,7 @@ router.register(r'modules', module_view.ModuleViewSet)
 router.register(r'lessons', lesson_view.LessonViewSet)
 router.register(r'questions', question_view.QuestionViewSet)
 router.register(r'question-options',que_option_view.QuestionOptionsViewSet)
-router.register(r'assignee', assignee_view.AssigneeViewSet)
-# router.register(r'userassignee', user_view.AddAssigneeUserViewSet)
+router.register(r'assignees', assignee_view.AssigneeViewSet)
 
 
 
@@ -26,7 +25,7 @@ urlpatterns = [
     path("logout/", user_view.LogoutAPIView.as_view(), name="logout"),
     path("forgot-password/",user_view.ForgotPasswordAPIView.as_view(), name="forgot-password"),
     path("reset-password/<str:token>/",user_view.ResetPasswordAPIView.as_view(), name="reset-password"),
-    path("", include(router.urls)),
-    
+    path("user-me/", user_view.MeAPIView.as_view(), name="user-me"),
+    path('', include(router.urls))
     
 ]

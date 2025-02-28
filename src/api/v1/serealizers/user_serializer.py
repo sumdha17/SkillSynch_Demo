@@ -2,7 +2,6 @@ from rest_framework import serializers
 from user.models import CustomUser
 from django.core.validators import RegexValidator, EmailValidator
 from django.contrib.auth import authenticate
-from course.models import Assignee
 
 class CustomUserSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(required=False,
@@ -74,29 +73,26 @@ class GetAllUserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ["first_name", "last_name", "email", "username", "status","phone_number","type"]
             
+
     
-
-
-class UserAssigneeSerializer(serializers.ModelSerializer):
-    designation = serializers.CharField(write_only=True, required=False)
-    name = serializers.SerializerMethodField()
-
+class MeApiSerializer(serializers.ModelSerializer):
+    gender = serializers.PrimaryKeyRelatedField(read_only=True)
+    status = serializers.PrimaryKeyRelatedField(read_only=True)
+    designation = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
-        model = Assignee
-        fields = '__all__'
+        model = CustomUser
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'gender', 'status', 'image', 'designation']
+        read_only_fields = ["id", "email", "designation", "status"]  # Prevent updating fields
+        
 
-    def get_name(self, obj):
-        return f"{obj.user.first_name} {obj.user.last_name}" if obj.user else ""
+    def to_representation(self, instance):
+        """Customize the output representation"""
+        data = super().to_representation(instance)
 
-    def validate(self, data):
-        if 'designation' in data:
-            user = CustomUser.objects.filter(designation__choice_name=data['designation']).first()
-            if not user:
-                raise serializers.ValidationError({'designation': 'User with this designation does not exist.'})
-            data['user'] = user
-            data.pop('designation')
-        else:
-            raise serializers.ValidationError({'error': 'Designation must be provided.'})
+        # Replace IDs with names
+        data['gender'] = str(instance.gender.choice_name )if instance.gender else None
+        data['status'] = str(instance.status.choice_name) if instance.status else None
+        data['designation'] = str(instance.designation.choice_name) if instance.designation else None
         return data
-
+    
         

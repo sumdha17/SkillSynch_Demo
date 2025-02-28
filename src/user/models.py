@@ -18,6 +18,10 @@ class CustomUser(AbstractUser, CommonFields):
     status = models.ForeignKey(Choice, on_delete=models.SET_NULL, related_name='user_status', limit_choices_to={'choice_type': 'status'}, null=True, blank=True)
     image = models.ImageField(upload_to='user_images', null=True, blank=True)
     designation = models.ForeignKey(Choice, on_delete=models.SET_NULL, related_name='assignee_designation',limit_choices_to={'choice_type': 'designation'}, blank=True, null=True )  
+    roll = models.ForeignKey(Choice, on_delete=models.SET_NULL, related_name='assignee_type', limit_choices_to={'choice_type': 'assignee'}, null=True)
+    department = models.CharField(max_length=200, blank=True, null=True)
+    grade = models.CharField(max_length=2, null=True, blank=True)
+
 
     
     USERNAME_FIELD = 'email'

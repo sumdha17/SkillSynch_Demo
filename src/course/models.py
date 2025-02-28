@@ -17,7 +17,6 @@ class Course(CommonFields):
     course_title = models.CharField(max_length=255)
     is_mandatory = models.BooleanField(null=True, blank= True, default=False)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='course_category', null=True,blank=True)
-    course_duration = models.DurationField(null=True, blank=True)
     status = models.ForeignKey(Choice, on_delete=models.SET_NULL, related_name='course_status', null=True, blank=True, limit_choices_to={'choice_type': 'status'})
     
     def __str__(self):
@@ -59,8 +58,7 @@ class Lesson(CommonFields):
 class Question(CommonFields): 
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name= 'module_question')
     question = models.CharField(max_length=255)
-    type = models.ForeignKey(Choice, on_delete=models.SET_NULL, null=True, blank=True, limit_choices_to={'choice_type': 'answer'}, related_name='question_type')
-    is_lesson = models.BooleanField(null=True, blank=True)
+    answer_type = models.ForeignKey(Choice, on_delete=models.SET_NULL, null=True, blank=True, limit_choices_to={'choice_type': 'answer'}, related_name='question_type')
     
     def __str__(self):
         return self.question
@@ -87,15 +85,12 @@ class QuestionOptions(CommonFields):
         
         
     
-class Assignee(CommonFields):    # many-to-relation with user
+class Assignee(CommonFields):
     course = models.ForeignKey(Course, on_delete=models.SET_NULL, related_name='assignee_course', blank=True,null=True)
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='assignee_user')
-    type = models.ForeignKey(Choice, on_delete=models.SET_NULL, related_name='assignee_type', limit_choices_to={'choice_type': 'assignee'}, null=True)
-    department = models.CharField(max_length=200, blank=True, null=True)
-    grade = models.CharField(max_length=2)
-
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='assignee_user')
+    
     def __str__(self):
-        return f'{self.user.first_name} {self.user.last_name} and designation is {self.designation}'
+        return f'{self.user.first_name} {self.user.last_name} and designation is {self.user.designation}'
 
     class Meta:
         db_table = 'assignees'
