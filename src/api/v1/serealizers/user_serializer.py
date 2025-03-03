@@ -43,7 +43,6 @@ class LoginSerializer(serializers.Serializer):
         user = authenticate(username=email, password=password)
         if not user:
             raise serializers.ValidationError("Invalid email or password")
-
         data["user"] = user
         return data
     
@@ -76,9 +75,6 @@ class GetAllUserSerializer(serializers.ModelSerializer):
 
     
 class MeApiSerializer(serializers.ModelSerializer):
-    gender = serializers.PrimaryKeyRelatedField(read_only=True)
-    status = serializers.PrimaryKeyRelatedField(read_only=True)
-    designation = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = CustomUser
         fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'gender', 'status', 'image', 'designation']

@@ -12,7 +12,7 @@ class CustomUser(AbstractUser, CommonFields):
     last_name = models.CharField(max_length=255)
     username = models.CharField(max_length=255, unique=True, blank=True, null=True)
     email = models.EmailField(max_length=255, unique=True)
-    phone_number = models.CharField(max_length=10, unique=True,validators=[MinLengthValidator(10)], blank=True, null=True)
+    phone_number = models.CharField(max_length=10, unique=True, validators=[MinLengthValidator(10)], blank=True, null=True)
     gender = models.ForeignKey(Choice, on_delete=models.SET_NULL, related_name='user_gender', limit_choices_to={'choice_type': 'gender'}, null=True, blank= True)
     type = models.ForeignKey(Choice, on_delete=models.SET_NULL, related_name='users_type', limit_choices_to={'choice_type': 'user'},null=True, blank=True)
     status = models.ForeignKey(Choice, on_delete=models.SET_NULL, related_name='user_status', limit_choices_to={'choice_type': 'status'}, null=True, blank=True)
